@@ -43,6 +43,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Android local properties
+android/local.properties
+
 # Environment variables
 .env
 .env.local
@@ -59,7 +62,14 @@ GoogleService-Info.plist
 *.p12
 service-account.json
 
-# Firebase binaries
+# Firebase binaries and large files
 firebase_binaries/
 
-*.md 
+# Node modules (functions)
+functions/node_modules/
+functions/venv/
+
+# Scripts and documentation
+*.md
+*.ps1
+*.sh
