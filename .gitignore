@@ -59,5 +59,7 @@ GoogleService-Info.plist
 *.p12
 service-account.json
 
+# Firebase binaries
+firebase_binaries/
 
 *.md 
