@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/app_colors.dart';
 import 'providers/auth_provider.dart';
 import 'providers/game_provider.dart';
 import 'screens/auth/login_screen.dart';
@@ -33,15 +34,46 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<AuthProvider>(
         builder: (context, authProvider, _) {
+          print('🎨 Building app, isLoading: ${authProvider.isLoading}, isAuthenticated: ${authProvider.isAuthenticated}');
+          
           // Mostrar splash mientras se verifica la autenticación
           if (authProvider.isLoading) {
             return MaterialApp(
               title: 'GameNext',
               theme: AppTheme.darkTheme,
               debugShowCheckedModeBanner: false,
-              home: const Scaffold(
+              home: Scaffold(
+                backgroundColor: AppColors.background,
                 body: Center(
-                  child: CircularProgressIndicator(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CircularProgressIndicator(color: AppColors.primary),
+                      const SizedBox(height: 20),
+                      RichText(
+                        text: const TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Game',
+                              style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'Next',
+                              style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

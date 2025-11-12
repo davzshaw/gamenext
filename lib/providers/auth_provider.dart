@@ -20,19 +20,42 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> _initAuth() async {
     print('🚀 Initializing AuthProvider...');
+    
+    // Timeout de seguridad: si después de 5 segundos no hay respuesta, forzar isLoading = false
+    Future.delayed(const Duration(seconds: 5), () {
+      if (_isLoading) {
+        print('⏱️ Timeout: Forcing isLoading = false');
+        _isLoading = false;
+        notifyListeners();
+      }
+    });
+    
     _authService.authStateChanges.listen((User? user) async {
       print('👤 Auth state changed: ${user?.email ?? "null"}');
-      if (user != null) {
-        print('📥 Fetching user data from Firestore...');
-        _currentUser = await _authService.getUserData(user.uid);
-        print('✅ User data loaded: ${_currentUser?.displayName}');
-      } else {
-        print('🚪 User logged out');
+      try {
+        if (user != null) {
+          print('📥 Fetching user data from Firestore for uid: ${user.uid}');
+          final userData = await _authService.getUserData(user.uid).timeout(
+            const Duration(seconds: 8),
+            onTimeout: () {
+              print('⏱️ Timeout fetching user data');
+              return null;
+            },
+          );
+          print('✅ User data loaded: ${userData?.displayName ?? "null"}');
+          _currentUser = userData;
+        } else {
+          print('🚪 User logged out');
+          _currentUser = null;
+        }
+      } catch (e) {
+        print('❌ Error fetching user data: $e');
         _currentUser = null;
+      } finally {
+        _isLoading = false;
+        print('🔄 Notifying listeners, isAuthenticated: $isAuthenticated, isLoading: $_isLoading');
+        notifyListeners();
       }
-      _isLoading = false;
-      print('🔄 Notifying listeners, isAuthenticated: $isAuthenticated');
-      notifyListeners();
     });
   }
 

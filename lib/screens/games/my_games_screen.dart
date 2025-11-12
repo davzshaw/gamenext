@@ -29,20 +29,87 @@ class MyGamesScreen extends StatelessWidget {
         stream: gameProvider.getMyGames(userId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  Text('Loading your games...', style: TextStyle(color: Colors.grey)),
+                ],
+              ),
+            );
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            final errorMessage = snapshot.error.toString();
+            if (errorMessage.contains('index')) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.warning_amber_rounded, size: 64, color: Colors.orange),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Creating database index...',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'This may take 1-2 minutes.\nPlease wait and try again.',
+                        style: TextStyle(color: Colors.grey),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const MyGamesScreen()),
+                          );
+                        },
+                        icon: const Icon(Icons.refresh),
+                        label: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text('Error: ${snapshot.error}'),
+                ],
+              ),
+            );
           }
 
           final myGames = snapshot.data ?? [];
 
           if (myGames.isEmpty) {
-            return const Center(
-              child: Text(
-                'No games yet',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.videogame_asset_off, size: 64, color: Colors.grey[700]),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'No games yet',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Add your first game!',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                ],
               ),
             );
           }

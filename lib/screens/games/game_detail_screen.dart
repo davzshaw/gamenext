@@ -75,9 +75,47 @@ class GameDetailScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Row(
                     children: [
+                      const Icon(Icons.person_outline, color: AppColors.textSecondary, size: 20),
+                      const SizedBox(width: 8),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            game.ownerName,
+                            style: const TextStyle(
+                              color: AppColors.textPrimary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            'Owner',
+                            style: const TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
                       const Icon(Icons.videogame_asset, color: AppColors.textSecondary, size: 20),
                       const SizedBox(width: 8),
                       Text(game.platform, style: const TextStyle(color: AppColors.textSecondary)),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      const Icon(Icons.calendar_today, color: AppColors.textSecondary, size: 18),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Added: ${game.addedDate.year}-${game.addedDate.month.toString().padLeft(2, '0')}-${game.addedDate.day.toString().padLeft(2, '0')}',
+                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 24),

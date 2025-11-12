@@ -7,11 +7,7 @@ class GameCard extends StatelessWidget {
   final GameModel game;
   final VoidCallback onTap;
 
-  const GameCard({
-    super.key,
-    required this.game,
-    required this.onTap,
-  });
+  const GameCard({super.key, required this.game, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +37,11 @@ class GameCard extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                       )
-                    : const Icon(Icons.videogame_asset, color: AppColors.textSecondary, size: 40),
+                    : const Icon(
+                        Icons.videogame_asset,
+                        color: AppColors.textSecondary,
+                        size: 40,
+                      ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -59,14 +59,36 @@ class GameCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.person_outline,
+                          size: 14,
+                          color: AppColors.textSecondary,
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            game.ownerName,
+                            style: const TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 12,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
                     Text(
                       game.platform,
                       style: const TextStyle(
                         color: AppColors.textSecondary,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6),
                     StatusBadge(status: game.status),
                   ],
                 ),
